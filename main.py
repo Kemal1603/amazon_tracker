@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import os
 import smtplib
 
 header_for_amazon = {
@@ -14,14 +15,14 @@ amazon_item_page = response.text
 soup = BeautifulSoup(amazon_item_page, "html.parser")
 price = int(soup.find('span', id="priceblock_ourprice").getText()[1:6].replace(",", ""))
 
-my_email = "developer20201203@gmail.com"
-password = "Rzvfkbr1"
+my_email = os.environ.get('EMAIL')
+password = os.environ.get('PASSWORD')
 
 if price < 1000:
     with smtplib.SMTP("smtp.gmail.com", port=587) as connection:
         connection.starttls()
         connection.login(user=my_email, password=password)
         connection.sendmail(from_addr=my_email,
-                            to_addrs="kemalis5@liave.com",
+                            to_addrs="kemalis5@live.com",
                             msg=(f"Subject: Стоимость Макбука упала!\n\n "
                                  f"'Цена Макбука уже ниже некуда!!! Надо брать!'").encode('utf-8'))
